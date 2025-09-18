@@ -6,7 +6,12 @@ using namespace std;
 enum class Err {
     None = 0,
     InvalidState,
-    InvalidArg
+    InvalidArg,
+    CardAbsent,
+    PinFailed,
+    AccountAbsent,
+    AccountNotSelected,
+    InsufficientBank
 };
 
 /**
