@@ -26,15 +26,15 @@ static int failed = 0;
 #define REQUIRE(cond) do { if(!(cond)) { cerr << "REQUIRE failed: " #cond "\n"; ++failed; } else ++passed; } while(0)
 
 TEST(test_card_insert_and_eject)
-    Card card{"12345", true};
+    Card card = "12345";
     FakeCardReader cardReader(card);
     Controller atm(cardReader);
 
-    REQUIRE(atm.insertCard());
-    REQUIRE(cardReader.card.cardId == "12345");
+    REQUIRE(atm.insertCard().isOk());
+    REQUIRE(cardReader.card.value() == "12345");
     REQUIRE(cardReader.inserted == true);
     REQUIRE(atm.state() == Controller::State::CardInserted);
-    REQUIRE(atm.ejectCard());
+    REQUIRE(atm.ejectCard().isOk());
     REQUIRE(cardReader.ejected == true);
     REQUIRE(atm.state() == Controller::State::Idle);
 END_TEST

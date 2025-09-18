@@ -1,18 +1,15 @@
 #pragma once
 #include <string>
+#include "Result.hpp"
 
 using namespace std;
 
-// TODO: New Result struct with template
-struct Card {
-    string cardId;
-    bool success;
-};
+using Card = string;
 
 class ICardReader{
 public:
     virtual ~ICardReader() = default;
 
-    virtual Card& read(void) = 0;
-    virtual void eject(void) = 0;
+    virtual Result<Card> read(void) = 0;
+    virtual Status eject(void) = 0;
 };

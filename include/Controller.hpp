@@ -27,8 +27,8 @@ public:
     State state(void) const;
     
     // Card
-    bool insertCard(void);
-    bool ejectCard(void);
+    Status insertCard(void);
+    Status ejectCard(void);
 
     // TODO: Bank
 

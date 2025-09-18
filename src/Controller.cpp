@@ -5,30 +5,28 @@ Controller::State Controller::state(void) const
     return _state;
 };
 
-bool Controller::insertCard(void)
+Status Controller::insertCard(void)
 {
     if (_state != State::Idle)
     {
-        return false;
+        return Status::error(Err::InvalidState);
     }
 
-    _card = _cardReader.read();
-    if (_card->success == false)
-    {
-        return false;
-    }
+    auto result = _cardReader.read();
+    if (!result.isOk()) return Status::error(result.error());
 
+    _card = result.value();
     _pinAttempts = 0;
     _state = State::CardInserted;
 
-    return true;
+    return Status::okStatus();
 }
 
-bool Controller::ejectCard(void)
+Status Controller::ejectCard(void)
 {
     if (_state == State::Idle)
     {
-        return false;
+        return Status::error(Err::InvalidState);
     }
 
     _cardReader.eject();
@@ -38,5 +36,5 @@ bool Controller::ejectCard(void)
     _pinAttempts = 0;
     _state = State::Idle;
 
-    return true;
+    return Status::okStatus();
 }

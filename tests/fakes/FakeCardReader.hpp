@@ -3,22 +3,22 @@
 
 class FakeCardReader : public ICardReader {
 public:
-    Card& card;
+    Result<Card> card;
     bool inserted = false;
     bool ejected = false;
 
     FakeCardReader(Card& card) : card(card)
     {}
 
-    Card& read(void)
+    Result<Card> read(void)
     {
         inserted = true;
         return card;
     }
 
-    void eject(void)
+    Status eject(void)
     {
         ejected = true;
-        return;
+        return Status::okStatus();
     }
 };
