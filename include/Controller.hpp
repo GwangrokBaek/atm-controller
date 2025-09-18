@@ -16,6 +16,7 @@ private:
     State _state = State::Idle;
     ICardReader& _cardReader;
     IBank& _bank;
+    ICashBin& _cashBin;
 
     Config _cfg;
 
@@ -29,10 +30,9 @@ private:
         return money >= 0;
     }
 
-    // TODO: Cash Bin
-
 public:
-    Controller(ICardReader& cardReader, IBank& bank) : _cardReader(cardReader), _bank(bank)
+    Controller(ICardReader& cardReader, IBank& bank, ICashBin& cashBin)
+     : _cardReader(cardReader), _bank(bank), _cashBin(cashBin)
     {}
 
     State state(void) const;
@@ -48,6 +48,4 @@ public:
     Result<int> getBalance(void) const;
     Status deposit(int money);
     Status withdraw(int money);
-
-    // TODO: Cash Bin
 };
