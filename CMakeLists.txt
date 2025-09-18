@@ -13,9 +13,15 @@ else()
     target_compile_options(atm_lib PRIVATE -Wall -Wextra -O2)
 endif()
 
-add_executable(atm tests/test_atm.cpp)
-target_link_libraries(atm atm_lib)
+file(GLOB TEST_FRAMEWORK_SOURCES CONFIGURE_DEPENDS 
+    tests/test_framework.cpp
+    tests/card_tests.cpp
+    tests/banking_tests.cpp
+)
 
+add_executable(atm tests/test_runner.cpp ${TEST_FRAMEWORK_SOURCES})
+target_link_libraries(atm atm_lib)
 target_include_directories(atm PRIVATE
-    $(CMAKE_SOURCE_DIR)/tests/fakes
+    ${CMAKE_SOURCE_DIR}/tests
+    ${CMAKE_SOURCE_DIR}/tests/fakes
 )
