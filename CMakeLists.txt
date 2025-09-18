@@ -17,6 +17,7 @@ file(GLOB TEST_FRAMEWORK_SOURCES CONFIGURE_DEPENDS
     tests/test_framework.cpp
     tests/card_tests.cpp
     tests/banking_tests.cpp
+    tests/exception_tests.cpp
 )
 
 add_executable(atm tests/test_runner.cpp ${TEST_FRAMEWORK_SOURCES})

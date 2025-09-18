@@ -5,6 +5,9 @@ extern void test_invalid_card_operations();
 extern void test_withdraw_and_balance();
 extern void test_deposit_and_balance();
 extern void test_pin_authentication();
+extern void test_card_reader_exception_handling();
+extern void test_memory_allocation_failure();
+extern void test_transaction_rollback_on_cash_failure();
 
 namespace TestFramework {
     int passed = 0;
@@ -19,12 +22,19 @@ namespace TestFramework {
     void registerAllTests() {
         testCases.clear();
         
+        // Card tests
         registerTest("test_card_insert_and_eject", test_card_insert_and_eject);
         registerTest("test_invalid_card_operations", test_invalid_card_operations);
         
+        // Bank tests
         registerTest("test_withdraw_and_balance", test_withdraw_and_balance);
         registerTest("test_deposit_and_balance", test_deposit_and_balance);
         registerTest("test_pin_authentication", test_pin_authentication);
+        
+        // Exception handling tests
+        registerTest("test_card_reader_exception_handling", test_card_reader_exception_handling);
+        registerTest("test_memory_allocation_failure", test_memory_allocation_failure);
+        registerTest("test_transaction_rollback_on_cash_failure", test_transaction_rollback_on_cash_failure);
     }
     
     void runAllTests() {
