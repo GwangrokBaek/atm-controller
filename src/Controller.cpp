@@ -176,7 +176,10 @@ Status Controller::withdraw(int money)
         return Status::error(Err::InsufficientBank);
     }
 
-    // TODO: check cash bin capacity
+    if (!_cashBin.canDispense(money).isOk())
+    {
+        return Status::error(Err::InsufficientCashBin);
+    }
 
     auto status = _bank.withdraw(*_account, money);
     if (!status.isOk())
@@ -184,7 +187,12 @@ Status Controller::withdraw(int money)
         return status;
     }
 
-    // TODO: check if it is really withdrawed by cash bin
+    status = _cashBin.dispense(money);
+    if (!status.isOk())
+    {
+        _bank.deposit(*_account, money);
+        return status;
+    }
 
     return Status::okStatus();
 }
