@@ -33,6 +33,7 @@ TEST(test_card_insert_and_eject)
     REQUIRE(atm.insertCard());
     REQUIRE(cardReader.card.cardId == "12345");
     REQUIRE(cardReader.inserted == true);
+    REQUIRE(atm.state() == Controller::State::CardInserted);
     REQUIRE(atm.ejectCard());
     REQUIRE(cardReader.ejected == true);
     REQUIRE(atm.state() == Controller::State::Idle);
