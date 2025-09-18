@@ -1,4 +1,6 @@
 #include <iostream>
+#include "Controller.hpp"
+#include "FakeCardReader.hpp"
 
 using namespace std;
 
@@ -23,7 +25,22 @@ static int failed = 0;
 
 #define REQUIRE(cond) do { if(!(cond)) { cerr << "REQUIRE failed: " #cond "\n"; ++failed; } else ++passed; } while(0)
 
+TEST(test_card_insert_and_eject)
+    Card card{"12345", true};
+    FakeCardReader cardReader(card);
+    Controller atm(cardReader);
+
+    REQUIRE(atm.insertCard());
+    REQUIRE(cardReader.card.cardId == "12345");
+    REQUIRE(cardReader.inserted == true);
+    REQUIRE(atm.ejectCard());
+    REQUIRE(cardReader.ejected == true);
+    REQUIRE(atm.state() == Controller::State::Idle);
+END_TEST
+
 int main()
 {
+    test_card_insert_and_eject();
+
     cout << "Tests passed : " << passed << ", failed : " << failed << endl;
 }
