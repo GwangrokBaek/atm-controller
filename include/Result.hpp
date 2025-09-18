@@ -12,7 +12,11 @@ enum class Err {
     AccountAbsent,
     AccountNotSelected,
     InsufficientBank,
-    InsufficientCashBin
+    InsufficientCashBin,
+    SystemError,
+    NetworkError,
+    HardwareError,
+    MemoryError,
 };
 
 /**
