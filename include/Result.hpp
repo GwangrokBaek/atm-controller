@@ -11,7 +11,8 @@ enum class Err {
     PinFailed,
     AccountAbsent,
     AccountNotSelected,
-    InsufficientBank
+    InsufficientBank,
+    InsufficientCashBin
 };
 
 /**
