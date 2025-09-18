@@ -112,7 +112,6 @@ Status Controller::enterPin(const Pin& pin)
         return Status::okStatus();
     }
     catch (const std::runtime_error& e) {
-        // Network or service error during PIN verification
         return Status::error(Err::NetworkError);
     }
     catch (const std::exception& e) {
@@ -139,7 +138,6 @@ Result<vector<AccountId>> Controller::listAccounts() const
         return _bank.listAccounts(*_card);
     }
     catch (const std::runtime_error& e) {
-        // Network error while fetching accounts
         return Err::NetworkError;
     }
     catch (const std::exception& e) {
@@ -281,25 +279,38 @@ Status Controller::withdraw(int money)
             return Status::error(Err::InsufficientCashBin);
         }
 
-        auto status = _bank.withdraw(*_account, money);
-        if (!status.isOk())
-        {
-            return status;
-        }
-
-        status = _cashBin.dispense(money);
-        if (!status.isOk())
-        {
-            // Rollback: deposit money back to account
-            try {
-                _bank.deposit(*_account, money);
-            } catch (...) {
-                return Status::error(Err::SystemError);
+        TransactionManager transaction;
+        
+        // bank withdraw operation
+        transaction.addOperation(
+            [&]() -> Status { 
+                return _bank.withdraw(*_account, money); 
+            },
+            [&]() { 
+                try {
+                    _bank.deposit(*_account, money);
+                } catch (...) {
+                }
             }
-            return status;
+        );
+        
+        // cash dispense operation
+        transaction.addOperation(
+            [&]() -> Status { 
+                return _cashBin.dispense(money); 
+            },
+            [&]() { 
+            }
+        );
+        
+        // Execute the atomic transaction
+        Status result = transaction.execute();
+        if (result.isOk()) {
+            // All operations succeeded - commit the transaction
+            transaction.commit();
         }
-
-        return Status::okStatus();
+        
+        return result;
     }
     catch (const std::bad_alloc& e) {
         return Status::error(Err::MemoryError);

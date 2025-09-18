@@ -22,4 +22,9 @@ public:
         }
         return Status::error(Err::InsufficientCashBin);
     }
+    
+    int getCurrentCapacity() const
+    {
+        return capacity;
+    }
 };

@@ -8,6 +8,9 @@ extern void test_pin_authentication();
 extern void test_card_reader_exception_handling();
 extern void test_memory_allocation_failure();
 extern void test_transaction_rollback_on_cash_failure();
+extern void test_atomic_transaction_rollback();
+extern void test_atomic_transaction_success();
+extern void test_multiple_atomic_transactions();
 
 namespace TestFramework {
     int passed = 0;
@@ -35,6 +38,11 @@ namespace TestFramework {
         registerTest("test_card_reader_exception_handling", test_card_reader_exception_handling);
         registerTest("test_memory_allocation_failure", test_memory_allocation_failure);
         registerTest("test_transaction_rollback_on_cash_failure", test_transaction_rollback_on_cash_failure);
+        
+        // Transaction atomicity tests
+        registerTest("test_atomic_transaction_rollback", test_atomic_transaction_rollback);
+        registerTest("test_atomic_transaction_success", test_atomic_transaction_success);
+        registerTest("test_multiple_atomic_transactions", test_multiple_atomic_transactions);
     }
     
     void runAllTests() {
