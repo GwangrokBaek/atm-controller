@@ -15,3 +15,7 @@ endif()
 
 add_executable(atm tests/test_atm.cpp)
 target_link_libraries(atm atm_lib)
+
+target_include_directories(atm PRIVATE
+    $(CMAKE_SOURCE_DIR)/tests/fakes
+)
