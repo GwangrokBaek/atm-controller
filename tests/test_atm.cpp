@@ -2,6 +2,7 @@
 #include "Controller.hpp"
 #include "FakeCardReader.hpp"
 #include "FakeBank.hpp"
+#include "FakeCashBin.hpp"
 
 using namespace std;
 
@@ -30,8 +31,9 @@ TEST(test_card_insert_and_eject)
     Card card = "CARD-001";
 
     FakeBank bank({{"", ""}}, {{"", {}}}, {{},{}});
+    FakeCashBin cashBin(0);
     FakeCardReader cardReader(card);
-    Controller atm(cardReader, bank);
+    Controller atm(cardReader, bank, cashBin);
 
     REQUIRE(atm.insertCard().isOk());
     REQUIRE(cardReader.card.value() == card);
@@ -49,14 +51,16 @@ TEST(test_withdraw_and_balance)
     AccountId account2 = "ACCOUNT-002";
     int balance1 = 1000;
     int balance2 = 1200;
+    int capacity = 10000;
 
     unordered_map<Card, Pin> pinMap = {{card, pin}};
     unordered_map<Card, vector<AccountId>> accountsMap = {{card, {account1, account2}}};
     unordered_map<AccountId, int> balanceMap = {{account1, balance1}, {account2, balance2}};
 
     FakeBank bank(pinMap, accountsMap, balanceMap);
+    FakeCashBin cashBin(capacity);
     FakeCardReader cardReader(card);
-    Controller atm(cardReader, bank);
+    Controller atm(cardReader, bank, cashBin);
 
     REQUIRE(atm.insertCard().isOk());
     REQUIRE(atm.enterPin(pin).isOk());
@@ -78,14 +82,16 @@ TEST(test_deposit_and_balance)
     AccountId account2 = "ACCOUNT-002";
     int balance1 = 1000;
     int balance2 = 1200;
+    int capacity = 10000;
 
     unordered_map<Card, Pin> pinMap = {{card, pin}};
     unordered_map<Card, vector<AccountId>> accountsMap = {{card, {account1, account2}}};
     unordered_map<AccountId, int> balanceMap = {{account1, balance1}, {account2, balance2}};
 
     FakeBank bank(pinMap, accountsMap, balanceMap);
+    FakeCashBin cashBin(capacity);
     FakeCardReader cardReader(card);
-    Controller atm(cardReader, bank);
+    Controller atm(cardReader, bank, cashBin);
 
     REQUIRE(atm.insertCard().isOk());
     REQUIRE(atm.enterPin(pin).isOk());
