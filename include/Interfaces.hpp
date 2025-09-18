@@ -29,3 +29,11 @@ public:
     virtual Result<Card> read(void) = 0;
     virtual Status eject(void) = 0;
 };
+
+class ICashBin {
+public:
+    virtual ~ICashBin() = default;
+    
+    virtual Status canDispense(int money) = 0;
+    virtual Status dispense(int money) = 0;
+};
